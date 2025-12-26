@@ -394,33 +394,63 @@
         // Storage key
         const STORAGE_KEY = 'groomingPortfolio';
 
+        // Test localStorage on load
+        function testStorage() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return true;
+            } catch (e) {
+                alert('⚠️ Storage is not available. Please make sure you added this to your home screen, not opening in browser!');
+                return false;
+            }
+        }
+
         // Load groomings on page load
         let groomings = [];
-        loadGroomings();
+        
+        window.addEventListener('load', function() {
+            console.log('App loaded');
+            testStorage();
+            loadGroomings();
+        });
 
         function loadGroomings() {
             try {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 groomings = stored ? JSON.parse(stored) : [];
+                console.log('Loaded groomings:', groomings.length);
                 renderGallery();
             } catch (e) {
                 console.error('Error loading data:', e);
+                alert('Error loading saved data: ' + e.message);
                 groomings = [];
             }
         }
 
         function saveToStorage() {
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(groomings));
-                console.log('Saved successfully!', groomings.length, 'items');
+                const jsonString = JSON.stringify(groomings);
+                localStorage.setItem(STORAGE_KEY, jsonString);
+                console.log('✅ Saved successfully!', groomings.length, 'items');
+                
+                // Verify it saved
+                const verify = localStorage.getItem(STORAGE_KEY);
+                if (!verify) {
+                    throw new Error('Data did not save to storage');
+                }
+                
+                return true;
             } catch (e) {
-                console.error('Error saving:', e);
-                alert('Error saving data. Your storage might be full.');
+                console.error('❌ Error saving:', e);
+                alert('⚠️ Could not save data: ' + e.message + '\n\nMake sure you added this app to your home screen!');
+                return false;
             }
         }
 
         function openModal() {
             document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
@@ -428,6 +458,7 @@
             document.getElementById('groomingForm').reset();
             document.getElementById('beforePreview').style.display = 'none';
             document.getElementById('afterPreview').style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         function previewImage(input, previewId) {
@@ -444,14 +475,22 @@
 
         function saveGrooming(event) {
             event.preventDefault();
+            
+            console.log('Saving grooming...');
 
             const beforeFile = document.getElementById('beforePhoto').files[0];
             const afterFile = document.getElementById('afterPhoto').files[0];
 
             if (!beforeFile || !afterFile) {
-                alert('Please upload both photos');
+                alert('❌ Please upload both photos');
                 return;
             }
+
+            // Show loading
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
 
             const reader1 = new FileReader();
             const reader2 = new FileReader();
@@ -467,10 +506,29 @@
                         date: new Date().toLocaleDateString()
                     };
 
+                    console.log('New grooming created:', newGrooming.name);
+                    
                     groomings.unshift(newGrooming);
-                    saveToStorage();
-                    renderGallery();
-                    closeModal();
+                    
+                    const saved = saveToStorage();
+                    
+                    if (saved) {
+                        console.log('✅ Successfully saved!');
+                        renderGallery();
+                        closeModal();
+                        
+                        // Show success message
+                        const msg = document.createElement('div');
+                        msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:15px 30px;border-radius:10px;z-index:9999;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                        msg.textContent = '✅ Saved successfully!';
+                        document.body.appendChild(msg);
+                        setTimeout(() => msg.remove(), 3000);
+                    } else {
+                        alert('❌ Failed to save. Please try again.');
+                    }
+                    
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 };
                 reader2.readAsDataURL(afterFile);
             };
@@ -478,21 +536,35 @@
         }
 
         function deleteGrooming(id) {
-            if (confirm('Delete this grooming?')) {
+            if (confirm('🗑️ Delete this grooming? This cannot be undone.')) {
+                console.log('Deleting grooming:', id);
                 groomings = groomings.filter(g => g.id !== id);
-                saveToStorage();
-                renderGallery();
+                const saved = saveToStorage();
+                
+                if (saved) {
+                    renderGallery();
+                    
+                    // Show success message
+                    const msg = document.createElement('div');
+                    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ef4444;color:white;padding:15px 30px;border-radius:10px;z-index:9999;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                    msg.textContent = '🗑️ Deleted successfully!';
+                    document.body.appendChild(msg);
+                    setTimeout(() => msg.remove(), 3000);
+                }
             }
         }
 
         function renderGallery() {
             const gallery = document.getElementById('gallery');
             
+            console.log('Rendering gallery with', groomings.length, 'items');
+            
             if (groomings.length === 0) {
                 gallery.innerHTML = `
                     <div class="empty-state">
                         <h2>No groomings yet!</h2>
                         <p>Click the + button to add your first before & after</p>
+                        <p style="margin-top:20px;font-size:0.9em;color:#9ca3af;">💡 Make sure you added this app to your home screen for data to save!</p>
                     </div>
                 `;
                 return;
@@ -537,14 +609,21 @@
                 handle.style.left = `${percent}%`;
             }
 
-            handle.addEventListener('mousedown', () => isDragging = true);
-            handle.addEventListener('touchstart', () => isDragging = true);
+            handle.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
+            handle.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
 
             document.addEventListener('mouseup', () => isDragging = false);
             document.addEventListener('touchend', () => isDragging = false);
 
             const handleMove = (e) => {
                 if (!isDragging) return;
+                e.preventDefault();
                 const rect = container.getBoundingClientRect();
                 const x = (e.clientX || e.touches[0].clientX) - rect.left;
                 const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
@@ -552,10 +631,10 @@
             };
 
             document.addEventListener('mousemove', handleMove);
-            document.addEventListener('touchmove', handleMove);
+            document.addEventListener('touchmove', handleMove, { passive: false });
 
             container.addEventListener('click', (e) => {
-                if (e.target === handle) return;
+                if (e.target === handle || e.target.closest('.slider-handle')) return;
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const percent = (x / rect.width) * 100;
