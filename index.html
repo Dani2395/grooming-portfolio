@@ -8,14 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Grooming">
     <meta name="theme-color" content="#7c3aed">
+    <meta name="description" content="Professional pet grooming portfolio">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%239b87f5'/%3E%3Cstop offset='100%25' style='stop-color:%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23grad)' width='180' height='180' rx='40'/%3E%3Ctext x='90' y='120' font-size='80' text-anchor='middle' fill='white'%3E🐾%3C/text%3E%3C/svg%3E">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #f3f0ff 0%, #e9ecef 100%);
@@ -38,7 +35,6 @@
             font-size: 1.9em;
             margin-bottom: 8px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
         
         .header p {
@@ -64,13 +60,8 @@
             transition: transform 0.2s;
         }
 
-        .add-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .add-btn:active {
-            transform: scale(0.95);
-        }
+        .add-btn:hover { transform: scale(1.05); }
+        .add-btn:active { transform: scale(0.95); }
 
         .modal {
             display: none;
@@ -110,16 +101,13 @@
             padding-bottom: 10px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
             margin-bottom: 8px;
             color: #374151;
             font-weight: 600;
-            font-size: 0.95em;
         }
 
         input[type="text"] {
@@ -144,7 +132,6 @@
             text-align: center;
             background: #faf8ff;
             cursor: pointer;
-            margin-bottom: 10px;
             transition: all 0.2s;
         }
 
@@ -153,9 +140,7 @@
             border-color: #7c3aed;
         }
 
-        .photo-upload input {
-            display: none;
-        }
+        .photo-upload input { display: none; }
 
         .photo-preview {
             width: 100%;
@@ -193,14 +178,15 @@
             box-shadow: 0 6px 16px rgba(124,58,237,0.4);
         }
 
+        .btn-save:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-cancel {
             flex: 1;
             background: #f3f4f6;
             color: #374151;
-        }
-        
-        .btn-cancel:hover {
-            background: #e5e7eb;
         }
 
         .gallery {
@@ -268,9 +254,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        .card-info {
-            padding: 18px;
-        }
+        .card-info { padding: 18px; }
 
         .card-name {
             font-size: 1.3em;
@@ -290,15 +274,11 @@
             color: #9ca3af;
             font-size: 0.9em;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .card-actions {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
         }
 
         .btn-delete {
@@ -319,6 +299,7 @@
             text-align: center;
             padding: 80px 20px;
             color: #9ca3af;
+            grid-column: 1 / -1;
         }
 
         .empty-state h2 {
@@ -327,15 +308,30 @@
             color: #6b7280;
             font-weight: 700;
         }
-        
-        .empty-state p {
-            font-size: 1.05em;
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            z-index: 9999;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideDown 0.3s ease;
+        }
+
+        .toast.success { background: #10b981; color: white; }
+        .toast.error { background: #ef4444; color: white; }
+
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            .gallery {
-                grid-template-columns: 1fr;
-            }
+            .gallery { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -345,9 +341,13 @@
         <p>Professional Pet Transformations</p>
     </div>
 
-    <div id="gallery" class="gallery"></div>
+    <div id="gallery" class="gallery">
+        <div class="empty-state">
+            <h2>Loading...</h2>
+        </div>
+    </div>
 
-    <button class="add-btn" onclick="openModal()" aria-label="Add new grooming">+</button>
+    <button class="add-btn" onclick="openModal()">+</button>
 
     <div id="modal" class="modal">
         <div class="modal-content">
@@ -384,75 +384,125 @@
 
                 <div class="btn-group">
                     <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-save">Save 🐾</button>
+                    <button type="submit" class="btn-save" id="saveBtn">Save 🐾</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Storage key
-        const STORAGE_KEY = 'groomingPortfolio';
+        // IndexedDB setup
+        const DB_NAME = 'GroomingPortfolioDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'groomings';
+        let db;
 
-        // Test localStorage on load
-        function testStorage() {
-            try {
-                localStorage.setItem('test', 'test');
-                localStorage.removeItem('test');
-                return true;
-            } catch (e) {
-                alert('⚠️ Storage is not available. Please make sure you added this to your home screen, not opening in browser!');
-                return false;
-            }
-        }
-
-        // Load groomings on page load
-        let groomings = [];
-        
-        window.addEventListener('load', function() {
-            console.log('App loaded');
-            testStorage();
-            loadGroomings();
-        });
-
-        function loadGroomings() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                groomings = stored ? JSON.parse(stored) : [];
-                console.log('Loaded groomings:', groomings.length);
-                renderGallery();
-            } catch (e) {
-                console.error('Error loading data:', e);
-                alert('Error loading saved data: ' + e.message);
-                groomings = [];
-            }
-        }
-
-        function saveToStorage() {
-            try {
-                const jsonString = JSON.stringify(groomings);
-                localStorage.setItem(STORAGE_KEY, jsonString);
-                console.log('✅ Saved successfully!', groomings.length, 'items');
+        // Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
                 
-                // Verify it saved
-                const verify = localStorage.getItem(STORAGE_KEY);
-                if (!verify) {
-                    throw new Error('Data did not save to storage');
-                }
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
                 
-                return true;
-            } catch (e) {
-                console.error('❌ Error saving:', e);
-                alert('⚠️ Could not save data: ' + e.message + '\n\nMake sure you added this app to your home screen!');
-                return false;
-            }
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        objectStore.createIndex('date', 'timestamp', { unique: false });
+                    }
+                };
+            });
         }
 
+        // Get all groomings
+        function getAllGroomings() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.getAll();
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Add grooming
+        function addGrooming(grooming) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.add(grooming);
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Delete grooming
+        function deleteGroomingFromDB(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.delete(id);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Compress image
+        function compressImage(file, maxWidth = 1000, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        canvas.toBlob((blob) => {
+                            resolve(blob);
+                        }, 'image/jpeg', quality);
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Open modal
         function openModal() {
             document.getElementById('modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
+        // Close modal
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.getElementById('groomingForm').reset();
@@ -461,11 +511,12 @@
             document.body.style.overflow = '';
         }
 
+        // Preview image
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                 };
@@ -473,129 +524,136 @@
             }
         }
 
-        function saveGrooming(event) {
+        // Save grooming
+        async function saveGrooming(event) {
             event.preventDefault();
             
-            console.log('Saving grooming...');
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Processing...';
+            saveBtn.disabled = true;
 
-            const beforeFile = document.getElementById('beforePhoto').files[0];
-            const afterFile = document.getElementById('afterPhoto').files[0];
+            try {
+                const beforeFile = document.getElementById('beforePhoto').files[0];
+                const afterFile = document.getElementById('afterPhoto').files[0];
 
-            if (!beforeFile || !afterFile) {
-                alert('❌ Please upload both photos');
-                return;
-            }
-
-            // Show loading
-            const submitBtn = event.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Saving...';
-            submitBtn.disabled = true;
-
-            const reader1 = new FileReader();
-            const reader2 = new FileReader();
-
-            reader1.onload = function(e1) {
-                reader2.onload = function(e2) {
-                    const newGrooming = {
-                        id: Date.now(),
-                        name: document.getElementById('dogName').value,
-                        breed: document.getElementById('dogBreed').value,
-                        beforeImg: e1.target.result,
-                        afterImg: e2.target.result,
-                        date: new Date().toLocaleDateString()
-                    };
-
-                    console.log('New grooming created:', newGrooming.name);
-                    
-                    groomings.unshift(newGrooming);
-                    
-                    const saved = saveToStorage();
-                    
-                    if (saved) {
-                        console.log('✅ Successfully saved!');
-                        renderGallery();
-                        closeModal();
-                        
-                        // Show success message
-                        const msg = document.createElement('div');
-                        msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:15px 30px;border-radius:10px;z-index:9999;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
-                        msg.textContent = '✅ Saved successfully!';
-                        document.body.appendChild(msg);
-                        setTimeout(() => msg.remove(), 3000);
-                    } else {
-                        alert('❌ Failed to save. Please try again.');
-                    }
-                    
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                };
-                reader2.readAsDataURL(afterFile);
-            };
-            reader1.readAsDataURL(beforeFile);
-        }
-
-        function deleteGrooming(id) {
-            if (confirm('🗑️ Delete this grooming? This cannot be undone.')) {
-                console.log('Deleting grooming:', id);
-                groomings = groomings.filter(g => g.id !== id);
-                const saved = saveToStorage();
-                
-                if (saved) {
-                    renderGallery();
-                    
-                    // Show success message
-                    const msg = document.createElement('div');
-                    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ef4444;color:white;padding:15px 30px;border-radius:10px;z-index:9999;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
-                    msg.textContent = '🗑️ Deleted successfully!';
-                    document.body.appendChild(msg);
-                    setTimeout(() => msg.remove(), 3000);
+                if (!beforeFile || !afterFile) {
+                    throw new Error('Please upload both photos');
                 }
+
+                // Compress images
+                saveBtn.textContent = 'Compressing images...';
+                const beforeBlob = await compressImage(beforeFile);
+                const afterBlob = await compressImage(afterFile);
+
+                // Convert blobs to base64
+                saveBtn.textContent = 'Saving...';
+                const beforeBase64 = await blobToBase64(beforeBlob);
+                const afterBase64 = await blobToBase64(afterBlob);
+
+                const grooming = {
+                    id: Date.now(),
+                    name: document.getElementById('dogName').value,
+                    breed: document.getElementById('dogBreed').value,
+                    beforeImg: beforeBase64,
+                    afterImg: afterBase64,
+                    date: new Date().toLocaleDateString(),
+                    timestamp: Date.now()
+                };
+
+                await addGrooming(grooming);
+                await renderGallery();
+                closeModal();
+                showToast('✅ Saved successfully!', 'success');
+
+            } catch (error) {
+                console.error('Error saving:', error);
+                showToast('❌ Error: ' + error.message, 'error');
+            } finally {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
             }
         }
 
-        function renderGallery() {
+        // Convert blob to base64
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // Delete grooming
+        async function deleteGrooming(id) {
+            if (!confirm('🗑️ Delete this grooming? This cannot be undone.')) return;
+            
+            try {
+                await deleteGroomingFromDB(id);
+                await renderGallery();
+                showToast('🗑️ Deleted successfully!', 'error');
+            } catch (error) {
+                console.error('Error deleting:', error);
+                showToast('❌ Error deleting', 'error');
+            }
+        }
+
+        // Render gallery
+        async function renderGallery() {
             const gallery = document.getElementById('gallery');
             
-            console.log('Rendering gallery with', groomings.length, 'items');
-            
-            if (groomings.length === 0) {
+            try {
+                const groomings = await getAllGroomings();
+                groomings.sort((a, b) => b.timestamp - a.timestamp);
+
+                if (groomings.length === 0) {
+                    gallery.innerHTML = `
+                        <div class="empty-state">
+                            <h2>No groomings yet!</h2>
+                            <p>Click the + button to add your first before & after</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                gallery.innerHTML = groomings.map(g => `
+                    <div class="card">
+                        <div class="card-images">
+                            <div class="slider-container" id="slider-${g.id}">
+                                <img src="${g.beforeImg}" class="card-image" alt="Before" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                                <img src="${g.afterImg}" class="card-image" alt="After">
+                                <div class="slider-handle" style="left: 50%"></div>
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-name">${g.name}</div>
+                            <div class="card-breed">${g.breed}</div>
+                            <div class="card-date">📅 ${g.date}</div>
+                            <div class="card-actions">
+                                <button class="btn-delete" onclick="deleteGrooming(${g.id})">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Initialize sliders
+                setTimeout(() => {
+                    groomings.forEach(g => initSlider(g.id));
+                }, 100);
+
+            } catch (error) {
+                console.error('Error rendering:', error);
                 gallery.innerHTML = `
                     <div class="empty-state">
-                        <h2>No groomings yet!</h2>
-                        <p>Click the + button to add your first before & after</p>
-                        <p style="margin-top:20px;font-size:0.9em;color:#9ca3af;">💡 Make sure you added this app to your home screen for data to save!</p>
+                        <h2>Error loading data</h2>
+                        <p>${error.message}</p>
                     </div>
                 `;
-                return;
             }
-
-            gallery.innerHTML = groomings.map(g => `
-                <div class="card">
-                    <div class="card-images">
-                        <div class="slider-container" id="slider-${g.id}">
-                            <img src="${g.beforeImg}" class="card-image" alt="Before grooming" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                            <img src="${g.afterImg}" class="card-image" alt="After grooming">
-                            <div class="slider-handle" style="left: 50%"></div>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-name">${g.name}</div>
-                        <div class="card-breed">${g.breed}</div>
-                        <div class="card-date">📅 ${g.date}</div>
-                        <div class="card-actions">
-                            <button class="btn-delete" onclick="deleteGrooming(${g.id})">🗑️ Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // Initialize sliders
-            setTimeout(() => {
-                groomings.forEach(g => initSlider(g.id));
-            }, 100);
         }
 
+        // Initialize slider
         function initSlider(id) {
             const container = document.getElementById(`slider-${id}`);
             if (!container) return;
@@ -613,6 +671,7 @@
                 isDragging = true;
                 e.preventDefault();
             });
+            
             handle.addEventListener('touchstart', (e) => {
                 isDragging = true;
                 e.preventDefault();
@@ -634,13 +693,31 @@
             document.addEventListener('touchmove', handleMove, { passive: false });
 
             container.addEventListener('click', (e) => {
-                if (e.target === handle || e.target.closest('.slider-handle')) return;
+                if (e.target.closest('.slider-handle')) return;
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const percent = (x / rect.width) * 100;
                 updateSlider(percent);
             });
         }
+
+        // Initialize app
+        window.addEventListener('load', async () => {
+            try {
+                await initDB();
+                await renderGallery();
+                console.log('✅ App initialized successfully');
+            } catch (error) {
+                console.error('❌ Error initializing app:', error);
+                document.getElementById('gallery').innerHTML = `
+                    <div class="empty-state">
+                        <h2>Error initializing app</h2>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 10px; font-size: 0.9em;">Try refreshing the page or clearing your browser cache.</p>
+                    </div>
+                `;
+            }
+        });
     </script>
 </body>
 </html>
