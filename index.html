@@ -16,21 +16,22 @@ header {
   background: #A78BFA; 
   color: white;
   text-align: center;
-  padding: 50px 15px;
+  padding: 40px 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 header h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 5px;
 }
 
 header p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-style: italic;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 950px;
   margin: 20px auto;
   padding: 0 15px;
 }
@@ -40,23 +41,23 @@ form {
   flex-wrap: wrap;
   gap: 10px;
   background: white;
-  padding: 20px;
+  padding: 15px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 input[type="text"] {
-  padding: 10px 15px;
-  border-radius: 25px;
+  padding: 8px 12px;
+  border-radius: 20px;
   border: 1px solid #ccc;
-  width: 180px;
-  font-size: 0.95rem;
+  width: 150px;
+  font-size: 0.9rem;
 }
 
 .custom-upload, button {
-  padding: 12px 25px;
+  padding: 10px 20px;
   border-radius: 25px;
   background: #7C3AED;
   color: white;
@@ -72,45 +73,65 @@ input[type="text"] {
 
 input[type="file"] { display: none; }
 
-.portfolio-item {
-  background: white;
-  margin-bottom: 30px;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  animation: fadeInUp 0.8s ease forwards;
-  opacity: 0;
+/* Card Layout */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
 }
 
-.portfolio-item img {
-  width: 100%;
-  display: block;
+.card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  width: 300px; /* smaller for mobile */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.images {
+  display: flex;
+  height: 150px;
+}
+
+.images img {
+  width: 50%;
   object-fit: cover;
 }
 
+.images img:first-child {
+  border-right: 1px solid #eee;
+}
+
+/* Info Badges */
 .info {
-  padding: 12px;
-  background: #f3f0ff;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+  justify-content: center;
+  background: #f3f0ff;
 }
 
 .info span {
   background: #A78BFA;
   color: white;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
-/* Simple fade-in animation */
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(20px);}
-  100% { opacity: 1; transform: translateY(0);}
+@media(max-width: 650px){
+  .card { width: 90%; }
+  .images { height: 120px; }
 }
-
 </style>
 </head>
 <body>
@@ -135,14 +156,14 @@ input[type="file"] { display: none; }
   <button type="submit">Add Photos</button>
 </form>
 
-<div id="portfolio"></div>
+<div class="gallery" id="gallery"></div>
 </div>
 
 <script>
 const form = document.getElementById('uploadForm');
-const portfolio = document.getElementById('portfolio');
+const gallery = document.getElementById('gallery');
 
-form.addEventListener('submit', e=>{
+form.addEventListener('submit', e => {
   e.preventDefault();
 
   const beforeFiles = document.getElementById('beforeImages').files;
@@ -157,8 +178,11 @@ form.addEventListener('submit', e=>{
   }
 
   for(let i=0;i<beforeFiles.length;i++){
-    const item = document.createElement('div');
-    item.classList.add('portfolio-item');
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    const imagesDiv = document.createElement('div');
+    imagesDiv.classList.add('images');
 
     const beforeImg = document.createElement('img');
     beforeImg.src = URL.createObjectURL(beforeFiles[i]);
@@ -168,17 +192,20 @@ form.addEventListener('submit', e=>{
     afterImg.src = URL.createObjectURL(afterFiles[i]);
     afterImg.alt = "After Groom";
 
+    imagesDiv.appendChild(beforeImg);
+    imagesDiv.appendChild(afterImg);
+
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('info');
-    if(dogName){ const span = document.createElement('span'); span.textContent = "Name: "+dogName; infoDiv.appendChild(span); }
-    if(dogBreed){ const span = document.createElement('span'); span.textContent = "Breed: "+dogBreed; infoDiv.appendChild(span); }
-    if(cutStyle){ const span = document.createElement('span'); span.textContent = "Cut: "+cutStyle; infoDiv.appendChild(span); }
 
-    item.appendChild(beforeImg);
-    item.appendChild(afterImg);
-    if(infoDiv.childNodes.length>0) item.appendChild(infoDiv);
+    if(dogName) { const span = document.createElement('span'); span.textContent = `Name: ${dogName}`; infoDiv.appendChild(span); }
+    if(dogBreed) { const span = document.createElement('span'); span.textContent = `Breed: ${dogBreed}`; infoDiv.appendChild(span); }
+    if(cutStyle) { const span = document.createElement('span'); span.textContent = `Cut: ${cutStyle}`; infoDiv.appendChild(span); }
 
-    portfolio.appendChild(item);
+    card.appendChild(imagesDiv);
+    if(infoDiv.childNodes.length > 0) card.appendChild(infoDiv);
+
+    gallery.appendChild(card);
   }
 
   form.reset();
