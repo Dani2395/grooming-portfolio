@@ -99,6 +99,8 @@ input[type="file"] { display: none; }
 .images {
   display: flex;
   flex-direction: column;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .images img {
@@ -110,6 +112,11 @@ input[type="file"] { display: none; }
 
 .images img:hover {
   transform: scale(1.05);
+}
+
+.image-label {
+  font-weight: bold;
+  margin: 5px 0;
 }
 
 /* Info under each image */
@@ -208,15 +215,19 @@ form.addEventListener('submit', e => {
     const deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = "Delete";
-    deleteBtn.onclick = () => card.remove();
+    deleteBtn.addEventListener('click', ()=> card.remove());
     card.appendChild(deleteBtn);
 
     // Before image
     const beforeDiv = document.createElement('div');
     beforeDiv.classList.add('images');
+    const beforeLabel = document.createElement('div');
+    beforeLabel.classList.add('image-label');
+    beforeLabel.textContent = "Before";
     const beforeImg = document.createElement('img');
     beforeImg.src = URL.createObjectURL(beforeFiles[i]);
     beforeImg.alt = "Before Groom";
+    beforeDiv.appendChild(beforeLabel);
     beforeDiv.appendChild(beforeImg);
 
     const beforeInfo = document.createElement('div');
@@ -229,9 +240,13 @@ form.addEventListener('submit', e => {
     // After image
     const afterDiv = document.createElement('div');
     afterDiv.classList.add('images');
+    const afterLabel = document.createElement('div');
+    afterLabel.classList.add('image-label');
+    afterLabel.textContent = "After";
     const afterImg = document.createElement('img');
     afterImg.src = URL.createObjectURL(afterFiles[i]);
     afterImg.alt = "After Groom";
+    afterDiv.appendChild(afterLabel);
     afterDiv.appendChild(afterImg);
 
     const afterInfo = document.createElement('div');
