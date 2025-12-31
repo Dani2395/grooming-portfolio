@@ -5,155 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grooming Portfolio</title>
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f9f9fb;
-  color: #333;
-}
-header {
-  background: #A78BFA;
-  color: white;
-  text-align: center;
-  padding: 40px 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-header h1 { font-size: 2rem; margin-bottom: 5px; }
-header p { font-size: 1rem; font-style: italic; }
-
-.container {
-  max-width: 950px;
-  margin: 20px auto;
-  padding: 0 15px;
-}
-
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  justify-content: center;
-  margin-bottom: 25px;
-}
-
-input[type="text"] {
-  padding: 8px 12px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  width: 150px;
-  font-size: 0.9rem;
-}
-
-.custom-upload, button {
-  padding: 10px 20px;
-  border-radius: 25px;
-  background: #7C3AED;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  transition: 0.3s;
-}
-
-.custom-upload:hover, button:hover {
-  background: #A78BFA;
-}
-
-input[type="file"] { display: none; }
-
-/* Gallery & Cards */
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-}
-
-.card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  width: 320px;
-  position: relative;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.images {
-  display: flex;
-  flex-direction: row;
-}
-
-.image-block {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  border-right: 1px solid #eee;
-}
-
-.image-block:last-child { border-right: none; }
-
-.image-block img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.image-block img:hover { transform: scale(1.05); }
-
-.image-label { font-weight: bold; margin: 5px 0; }
-
-.info {
-  padding: 5px;
-  background: #f3f0ff;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  justify-content: center;
-}
-
-.info span {
-  background: #A78BFA;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 15px;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-.delete-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #EF4444;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.8rem;
-  transition: 0.3s;
-}
-
-.delete-btn:hover { background: #B91C1C; }
-
-@media(max-width:650px){
-  .card { width: 90%; }
-  .image-block img { height: 120px; }
-  .images { flex-direction: column; }
-  .image-block { width: 100%; border-right: none; }
-}
+/* Same styling as before */
+body { margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f9f9fb; color:#333; }
+header { background:#A78BFA; color:white; text-align:center; padding:40px 15px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+header h1{font-size:2rem;margin-bottom:5px;}
+header p{font-size:1rem;font-style:italic;}
+.container{max-width:950px;margin:20px auto;padding:0 15px;}
+form{display:flex;flex-wrap:wrap;gap:10px;background:white;padding:15px;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);justify-content:center;margin-bottom:25px;}
+input[type="text"]{padding:8px 12px;border-radius:20px;border:1px solid #ccc;width:150px;font-size:0.9rem;}
+.custom-upload, button{padding:10px 20px;border-radius:25px;background:#7C3AED;color:white;font-weight:bold;cursor:pointer;border:none;transition:0.3s;}
+.custom-upload:hover, button:hover{background:#A78BFA;}
+input[type="file"]{display:none;}
+.gallery{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
+.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);width:320px;position:relative;transition: transform 0.3s, box-shadow 0.3s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);}
+.images{display:flex;flex-direction:row;}
+.image-block{width:50%;display:flex;flex-direction:column;text-align:center;border-right:1px solid #eee;}
+.image-block:last-child{border-right:none;}
+.image-block img{width:100%;height:150px;object-fit:cover;transition: transform 0.3s;}
+.image-block img:hover{transform:scale(1.05);}
+.image-label{font-weight:bold;margin:5px 0;}
+.info{padding:5px;background:#f3f0ff;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.info span{background:#A78BFA;color:white;padding:4px 8px;border-radius:15px;font-weight:600;font-size:0.75rem;}
+.delete-btn{position:absolute;top:8px;right:8px;background:#EF4444;color:white;border:none;border-radius:12px;padding:5px 10px;cursor:pointer;font-weight:bold;font-size:0.8rem;transition:0.3s;}
+.delete-btn:hover{background:#B91C1C;}
+@media(max-width:650px){.card{width:90%;}.image-block img{height:120px;}.images{flex-direction:column;}.image-block{width:100%;border-right:none;}}
 </style>
 </head>
 <body>
@@ -189,28 +65,28 @@ const gallery = document.getElementById('gallery');
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 portfolio.forEach(item => addCard(item));
 
-// Resize image to max width and compress
-function resizeImage(file, maxWidth, callback){
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const scale = maxWidth / img.width;
-      canvas.width = maxWidth;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      callback(canvas.toDataURL('image/jpeg',0.7));
-    }
-    img.src = e.target.result;
-  }
-  reader.readAsDataURL(file);
+function resizeImage(file, maxWidth){
+  return new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement('canvas');
+        const scale = maxWidth / img.width;
+        canvas.width = maxWidth;
+        canvas.height = img.height * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',0.7));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e=>{
   e.preventDefault();
-
   const beforeFiles = document.getElementById('beforeImages').files;
   const afterFiles = document.getElementById('afterImages').files;
   const dogName = document.getElementById('dogName').value;
@@ -223,73 +99,53 @@ form.addEventListener('submit', e => {
   }
 
   for(let i=0;i<beforeFiles.length;i++){
-    resizeImage(beforeFiles[i],500,beforeData=>{
-      resizeImage(afterFiles[i],500,afterData=>{
-        const item = {before:beforeData,after:afterData,name:dogName,breed:dogBreed,cut:cutStyle};
-        portfolio.push(item);
-        localStorage.setItem('portfolio', JSON.stringify(portfolio));
-        addCard(item);
-      });
-    });
+    const beforeData = await resizeImage(beforeFiles[i],500);
+    const afterData = await resizeImage(afterFiles[i],500);
+    const item = {before:beforeData, after:afterData, name:dogName, breed:dogBreed, cut:cutStyle};
+    portfolio.push(item);
+    localStorage.setItem('portfolio', JSON.stringify(portfolio));
+    addCard(item);
   }
   form.reset();
 });
 
 function addCard(item){
-  const card = document.createElement('div');
+  const card=document.createElement('div');
   card.classList.add('card');
 
-  const deleteBtn = document.createElement('button');
+  const deleteBtn=document.createElement('button');
   deleteBtn.classList.add('delete-btn');
   deleteBtn.textContent="Delete";
-  deleteBtn.onclick = ()=>{
+  deleteBtn.onclick=()=>{
     card.remove();
     portfolio = portfolio.filter(p=>p!==item);
     localStorage.setItem('portfolio',JSON.stringify(portfolio));
   }
   card.appendChild(deleteBtn);
 
-  const imagesDiv = document.createElement('div');
+  const imagesDiv=document.createElement('div');
   imagesDiv.classList.add('images');
-
-  const beforeBlock = createBlock("Before",item.before,item);
-  const afterBlock = createBlock("After",item.after,item);
-
-  imagesDiv.appendChild(beforeBlock);
-  imagesDiv.appendChild(afterBlock);
+  imagesDiv.appendChild(createBlock("Before",item.before,item));
+  imagesDiv.appendChild(createBlock("After",item.after,item));
   card.appendChild(imagesDiv);
-
   gallery.appendChild(card);
 }
 
 function createBlock(label,imgSrc,item){
-  const block = document.createElement('div');
+  const block=document.createElement('div');
   block.classList.add('image-block');
-
-  const labelDiv = document.createElement('div');
-  labelDiv.classList.add('image-label');
-  labelDiv.textContent=label;
-
-  const img = document.createElement('img');
-  img.src=imgSrc;
-
-  const info = document.createElement('div');
-  info.classList.add('info');
+  const labelDiv=document.createElement('div');
+  labelDiv.classList.add('image-label'); labelDiv.textContent=label;
+  const img=document.createElement('img'); img.src=imgSrc;
+  const info=document.createElement('div'); info.classList.add('info');
   if(item.name) info.appendChild(createSpan("Name: "+item.name));
   if(item.breed) info.appendChild(createSpan("Breed: "+item.breed));
   if(item.cut) info.appendChild(createSpan("Cut: "+item.cut));
-
-  block.appendChild(labelDiv);
-  block.appendChild(img);
-  block.appendChild(info);
+  block.appendChild(labelDiv); block.appendChild(img); block.appendChild(info);
   return block;
 }
 
-function createSpan(text){
-  const span=document.createElement('span');
-  span.textContent=text;
-  return span;
-}
+function createSpan(text){ const span=document.createElement('span'); span.textContent=text; return span; }
 </script>
 
 </body>
