@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grooming Portfolio</title>
 <style>
-/* Same styling as before */
 body { margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f9f9fb; color:#333; }
 header { background:#A78BFA; color:white; text-align:center; padding:40px 15px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
 header h1{font-size:2rem;margin-bottom:5px;}
@@ -16,20 +15,19 @@ input[type="text"]{padding:8px 12px;border-radius:20px;border:1px solid #ccc;wid
 .custom-upload, button{padding:10px 20px;border-radius:25px;background:#7C3AED;color:white;font-weight:bold;cursor:pointer;border:none;transition:0.3s;}
 .custom-upload:hover, button:hover{background:#A78BFA;}
 input[type="file"]{display:none;}
-.gallery{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
-.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);width:320px;position:relative;transition: transform 0.3s, box-shadow 0.3s;}
+.gallery{display:flex;flex-direction:column;gap:15px;align-items:center;}
+.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);width:100%;max-width:700px;position:relative;transition: transform 0.3s, box-shadow 0.3s;}
 .card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);}
 .images{display:flex;flex-direction:row;}
-.image-block{width:50%;display:flex;flex-direction:column;text-align:center;border-right:1px solid #eee;}
+.image-block{flex:1; display:flex; flex-direction:column; text-align:center; border-right:1px solid #eee; margin:0;}
 .image-block:last-child{border-right:none;}
-.image-block img{width:100%;height:150px;object-fit:cover;transition: transform 0.3s;}
-.image-block img:hover{transform:scale(1.05);}
-.image-label{font-weight:bold;margin:5px 0;}
+.image-block img{width:100%; height:200px; object-fit:cover; margin-bottom:5px;}
+.image-label{font-weight:bold; margin:5px 0;}
 .info{padding:5px;background:#f3f0ff;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
 .info span{background:#A78BFA;color:white;padding:4px 8px;border-radius:15px;font-weight:600;font-size:0.75rem;}
 .delete-btn{position:absolute;top:8px;right:8px;background:#EF4444;color:white;border:none;border-radius:12px;padding:5px 10px;cursor:pointer;font-weight:bold;font-size:0.8rem;transition:0.3s;}
 .delete-btn:hover{background:#B91C1C;}
-@media(max-width:650px){.card{width:90%;}.image-block img{height:120px;}.images{flex-direction:column;}.image-block{width:100%;border-right:none;}}
+@media(max-width:650px){.images{flex-direction:column;}.image-block{border-right:none;}.image-block img{height:150px;}}
 </style>
 </head>
 <body>
@@ -65,8 +63,9 @@ const gallery = document.getElementById('gallery');
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 portfolio.forEach(item => addCard(item));
 
+// Resize image function
 function resizeImage(file, maxWidth){
-  return new Promise((resolve)=>{
+  return new Promise(resolve=>{
     const reader = new FileReader();
     reader.onload = e=>{
       const img = new Image();
@@ -75,8 +74,7 @@ function resizeImage(file, maxWidth){
         const scale = maxWidth / img.width;
         canvas.width = maxWidth;
         canvas.height = img.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
         resolve(canvas.toDataURL('image/jpeg',0.7));
       };
       img.src=e.target.result;
@@ -118,15 +116,17 @@ function addCard(item){
   deleteBtn.textContent="Delete";
   deleteBtn.onclick=()=>{
     card.remove();
-    portfolio = portfolio.filter(p=>p!==item);
+    portfolio=portfolio.filter(p=>p!==item);
     localStorage.setItem('portfolio',JSON.stringify(portfolio));
   }
   card.appendChild(deleteBtn);
 
   const imagesDiv=document.createElement('div');
   imagesDiv.classList.add('images');
+
   imagesDiv.appendChild(createBlock("Before",item.before,item));
   imagesDiv.appendChild(createBlock("After",item.after,item));
+
   card.appendChild(imagesDiv);
   gallery.appendChild(card);
 }
