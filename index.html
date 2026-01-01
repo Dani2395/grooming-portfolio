@@ -4,148 +4,237 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grooming Portfolio</title>
+
 <style>
-body { margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f9f9fb; color:#333; }
-header { background:#A78BFA; color:white; text-align:center; padding:40px 15px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-header h1{font-size:2rem;margin-bottom:5px;}
-header p{font-size:1rem;font-style:italic;}
-.container{max-width:950px;margin:20px auto;padding:0 15px;}
-form{display:flex;flex-wrap:wrap;gap:10px;background:white;padding:15px;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);justify-content:center;margin-bottom:25px;}
-input[type="text"]{padding:8px 12px;border-radius:20px;border:1px solid #ccc;width:150px;font-size:0.9rem;}
-.custom-upload, button{padding:10px 20px;border-radius:25px;background:#7C3AED;color:white;font-weight:bold;cursor:pointer;border:none;transition:0.3s;}
-.custom-upload:hover, button:hover{background:#A78BFA;}
-input[type="file"]{display:none;}
-.gallery{display:flex;flex-direction:column;gap:15px;align-items:center;}
-.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);width:100%;max-width:700px;position:relative;transition: transform 0.3s, box-shadow 0.3s;}
-.card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);}
-.images{display:flex;flex-direction:row;}
-.image-block{flex:1; display:flex; flex-direction:column; text-align:center; border-right:1px solid #eee; margin:0;}
-.image-block:last-child{border-right:none;}
-.image-block img{width:100%; height:200px; object-fit:cover; margin-bottom:5px;}
-.image-label{font-weight:bold; margin:5px 0;}
-.info{padding:5px;background:#f3f0ff;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
-.info span{background:#A78BFA;color:white;padding:4px 8px;border-radius:15px;font-weight:600;font-size:0.75rem;}
-.delete-btn{position:absolute;top:8px;right:8px;background:#EF4444;color:white;border:none;border-radius:12px;padding:5px 10px;cursor:pointer;font-weight:bold;font-size:0.8rem;transition:0.3s;}
-.delete-btn:hover{background:#B91C1C;}
-@media(max-width:650px){.images{flex-direction:column;}.image-block{border-right:none;}.image-block img{height:150px;}}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f4fb;
+}
+
+/* Header */
+header {
+  background: #9f8cff;
+  color: white;
+  text-align: center;
+  padding: 25px 10px;
+}
+
+/* Upload Form */
+form {
+  background: white;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+input[type="text"] {
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 120px;
+  font-size: 0.8rem;
+}
+
+label, button {
+  background: #7c6aed;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  font-size: 0.8rem;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* ✅ CARD GRID — THIS IS THE FIX */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+  padding: 12px;
+}
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Delete */
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Images LEFT / RIGHT */
+.images {
+  display: flex;
+}
+
+.image-block {
+  width: 50%;
+  text-align: center;
+}
+
+.image-block img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.image-label {
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin: 3px 0;
+}
+
+/* Info */
+.info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  padding: 4px;
+}
+
+.info span {
+  background: #9f8cff;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 0.6rem;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>🐾 Danielle's Grooming Portfolio</h1>
-  <p>Professional before & after showcase</p>
+  <h2>🐾 Grooming Portfolio</h2>
 </header>
 
-<div class="container">
 <form id="uploadForm">
-  <label class="custom-upload" for="beforeImages">Select Before Photos</label>
-  <input type="file" id="beforeImages" accept="image/*" multiple required>
-  
-  <label class="custom-upload" for="afterImages">Select After Photos</label>
-  <input type="file" id="afterImages" accept="image/*" multiple required>
+  <label for="before">Before</label>
+  <input type="file" id="before" accept="image/*" multiple required>
 
-  <input type="text" id="dogName" placeholder="Dog Name (optional)">
-  <input type="text" id="dogBreed" placeholder="Breed (optional)">
-  <input type="text" id="cutStyle" placeholder="Cut Style (optional)">
-  
-  <button type="submit">Add Photos</button>
+  <label for="after">After</label>
+  <input type="file" id="after" accept="image/*" multiple required>
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="breed" placeholder="Breed">
+  <input type="text" id="cut" placeholder="Cut">
+
+  <button>Add</button>
 </form>
 
 <div class="gallery" id="gallery"></div>
-</div>
 
 <script>
-const form = document.getElementById('uploadForm');
-const gallery = document.getElementById('gallery');
+const gallery = document.getElementById("gallery");
+let portfolio = JSON.parse(localStorage.getItem("portfolio")) || [];
 
-// Load saved portfolio
-let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
-portfolio.forEach(item => addCard(item));
+portfolio.forEach(addCard);
 
-// Resize image function
-function resizeImage(file, maxWidth){
-  return new Promise(resolve=>{
+document.getElementById("uploadForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const before = document.getElementById("before").files;
+  const after = document.getElementById("after").files;
+
+  if (before.length !== after.length) {
+    alert("Before & After count must match");
+    return;
+  }
+
+  for (let i = 0; i < before.length; i++) {
+    const item = {
+      before: await resize(before[i]),
+      after: await resize(after[i]),
+      name: name.value,
+      breed: breed.value,
+      cut: cut.value
+    };
+    portfolio.push(item);
+    addCard(item);
+  }
+
+  localStorage.setItem("portfolio", JSON.stringify(portfolio));
+  e.target.reset();
+});
+
+function resize(file) {
+  return new Promise(resolve => {
     const reader = new FileReader();
-    reader.onload = e=>{
+    reader.onload = e => {
       const img = new Image();
-      img.onload = ()=>{
-        const canvas = document.createElement('canvas');
-        const scale = maxWidth / img.width;
-        canvas.width = maxWidth;
-        canvas.height = img.height * scale;
-        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg',0.7));
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        const scale = 300 / img.width;
+        c.width = 300;
+        c.height = img.height * scale;
+        c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+        resolve(c.toDataURL("image/jpeg",0.7));
       };
-      img.src=e.target.result;
+      img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
-form.addEventListener('submit', async e=>{
-  e.preventDefault();
-  const beforeFiles = document.getElementById('beforeImages').files;
-  const afterFiles = document.getElementById('afterImages').files;
-  const dogName = document.getElementById('dogName').value;
-  const dogBreed = document.getElementById('dogBreed').value;
-  const cutStyle = document.getElementById('cutStyle').value;
+function addCard(item) {
+  const card = document.createElement("div");
+  card.className = "card";
 
-  if(beforeFiles.length !== afterFiles.length){
-    alert("Please select equal number of before and after photos");
-    return;
-  }
-
-  for(let i=0;i<beforeFiles.length;i++){
-    const beforeData = await resizeImage(beforeFiles[i],500);
-    const afterData = await resizeImage(afterFiles[i],500);
-    const item = {before:beforeData, after:afterData, name:dogName, breed:dogBreed, cut:cutStyle};
-    portfolio.push(item);
-    localStorage.setItem('portfolio', JSON.stringify(portfolio));
-    addCard(item);
-  }
-  form.reset();
-});
-
-function addCard(item){
-  const card=document.createElement('div');
-  card.classList.add('card');
-
-  const deleteBtn=document.createElement('button');
-  deleteBtn.classList.add('delete-btn');
-  deleteBtn.textContent="Delete";
-  deleteBtn.onclick=()=>{
+  const del = document.createElement("button");
+  del.className = "delete-btn";
+  del.textContent = "×";
+  del.onclick = () => {
+    portfolio = portfolio.filter(p => p !== item);
+    localStorage.setItem("portfolio", JSON.stringify(portfolio));
     card.remove();
-    portfolio=portfolio.filter(p=>p!==item);
-    localStorage.setItem('portfolio',JSON.stringify(portfolio));
-  }
-  card.appendChild(deleteBtn);
+  };
 
-  const imagesDiv=document.createElement('div');
-  imagesDiv.classList.add('images');
-
-  imagesDiv.appendChild(createBlock("Before",item.before,item));
-  imagesDiv.appendChild(createBlock("After",item.after,item));
-
-  card.appendChild(imagesDiv);
+  card.innerHTML = `
+    <div class="images">
+      <div class="image-block">
+        <div class="image-label">Before</div>
+        <img src="${item.before}">
+      </div>
+      <div class="image-block">
+        <div class="image-label">After</div>
+        <img src="${item.after}">
+      </div>
+    </div>
+    <div class="info">
+      ${item.name ? `<span>${item.name}</span>` : ""}
+      ${item.breed ? `<span>${item.breed}</span>` : ""}
+      ${item.cut ? `<span>${item.cut}</span>` : ""}
+    </div>
+  `;
+  card.appendChild(del);
   gallery.appendChild(card);
 }
-
-function createBlock(label,imgSrc,item){
-  const block=document.createElement('div');
-  block.classList.add('image-block');
-  const labelDiv=document.createElement('div');
-  labelDiv.classList.add('image-label'); labelDiv.textContent=label;
-  const img=document.createElement('img'); img.src=imgSrc;
-  const info=document.createElement('div'); info.classList.add('info');
-  if(item.name) info.appendChild(createSpan("Name: "+item.name));
-  if(item.breed) info.appendChild(createSpan("Breed: "+item.breed));
-  if(item.cut) info.appendChild(createSpan("Cut: "+item.cut));
-  block.appendChild(labelDiv); block.appendChild(img); block.appendChild(info);
-  return block;
-}
-
-function createSpan(text){ const span=document.createElement('span'); span.textContent=text; return span; }
 </script>
 
 </body>
